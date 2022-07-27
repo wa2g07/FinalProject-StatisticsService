@@ -1,0 +1,43 @@
+db.transits.aggregate([
+        {$addFields: {date: {$dateToString: {format: "%Y%m%d", date: "$timestamp"}}}},
+        {$match: {date: {$gte: "20220701", $lte: "20220722"}}},
+        {$project: {date: 1}},
+        {$group: {_id: "$date", count: {$count: {}}}}
+])
+
+db.transits.aggregate([
+    {$addFields: {date: {$dateToString: {format: "%Y%m%d", date: "$timestamp"}}}},
+    {$match: {date: "20220722"}},
+    {$addFields: {hour: {$hour: "$timestamp"}}},
+    {$project: {hour: 1}},
+    {$group: {_id: "$hour", count: {$count: {}}}}
+])
+
+
+db.transits.aggregate([
+    {$match: {username: "customer2"}},
+    {$addFields: {date: {$dateToString: {format: "%Y%m%d", date: "$timestamp"}}}},
+    {$match: {date: {$gte: "20220701", $lte: "20220722"}}},
+    {$addFields: {hour: {$hour: "$timestamp"}}},
+    {$project: {hour: 1}},
+    {$group: {_id: "$hour", count: {$count: {}}}}
+])
+
+db.transactions.insertOne({
+    cost: 12.800000190734863,
+    date: ISODate(2021-7-21),
+    success: true,
+    ticketAmount: 3,
+    ticketId: "62d7cc2bfefe406f7f95855c",
+    username: "customer2"
+})
+db.transactions.aggregate([
+    {$addFields: {year: {$year: "$date"}}},
+    {$match: {year: 2022}},
+    {$project: {username: 1, ticketAmount: 1}},
+    {$group: {_id: "$username", value: {$sum: "$ticketAmount"}}},
+    {$sort: {value: 1}},
+    {$limit: 2}
+])
+
+db.transactions.find()
