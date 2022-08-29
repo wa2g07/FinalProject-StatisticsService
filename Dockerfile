@@ -3,7 +3,7 @@ FROM gradle:jdk17 AS build-stage
 COPY ./ ./
 RUN  ./gradlew build --exclude-task test 
 
-FROM openjdk:17-alpine
+FROM openjdk:20
 
 ENV SERVICE_PORT=8084
 COPY --from=build-stage /home/gradle/build/libs/StatisticsService-0.0.1-SNAPSHOT.jar /app.jar
