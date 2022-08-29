@@ -1,4 +1,4 @@
-FROM gradle:jdk-17 AS build-stage
+FROM gradle:jdk17 AS build-stage
 
 COPY ./ ./
 RUN  ./gradlew build --exclude-task test 
